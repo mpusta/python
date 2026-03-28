@@ -80,3 +80,24 @@ print(f"\nPredicted synergy: {pred_pct:.1f}% of ${combined_costs}M = ${pred_pct/
 # Multicollinearity.
 # Geographic overlap and network overlap are probably highly correlated.
 # Companies that overlap geographically tend to overlap in infrastructure too.
+
+
+# -------------------------------------------------------------------------
+# MULTICOLLINEARITY CHECK
+# -------------------------------------------------------------------------
+
+print("\nCorrelation matrix:")
+print(deals[feature_cols].corr().round(3))
+
+# Variables are highly correlated, so we need to drop one,
+# since that's the natural next step once you see the correlation is high:
+
+
+# -------------------------------------------------------------------------
+# SIMPLIFIED MODEL (single variable, more honest with only 8 observations)
+# -------------------------------------------------------------------------
+
+X_simple = sm.add_constant(deals['geo_overlap_pct'])
+model_simple = sm.OLS(y, X_simple).fit()
+print("\nSimplified model (geo_overlap only):")
+print(model_simple.summary())
